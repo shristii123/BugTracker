@@ -128,8 +128,8 @@ dotnet ef database update
 dotnet run
 ```
 
-API will be available at: **http://localhost:5000**
-Swagger UI at: **http://localhost:5000/swagger**
+API will be available at: **http://localhost:55578**
+Swagger UI at: **http://localhost:55578/swagger**
 
 ---
 
@@ -165,6 +165,7 @@ Frontend will be available at: **http://localhost:3000**
 | GET | `/api/bugs/{id}` | ✅ | Any | Get bug by ID |
 | GET | `/api/bugs/my` | ✅ | Any | Get my reported bugs |
 | GET | `/api/bugs/unassigned` | ✅ | Developer | Get unassigned bugs |
+| GET | `/api/bugs/developers` | ✅ | Developer | Get list of all developers (for assignment) |
 | POST | `/api/bugs` | ✅ | Any | Report a new bug |
 | PUT | `/api/bugs/{id}/assign` | ✅ | Developer | Assign bug to self |
 | PUT | `/api/bugs/{id}/status` | ✅ | Developer | Update bug status |
