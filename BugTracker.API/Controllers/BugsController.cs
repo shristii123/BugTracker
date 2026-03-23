@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using BugTracker.API.Data;
 using BugTracker.API.DTOs;
 using BugTracker.API.Models;
 using BugTracker.API.Services;
@@ -15,10 +16,14 @@ public class BugsController : ControllerBase
 {
     private readonly IBugService _bugs;
     private readonly UserManager<AppUser> _userManager;
-    public BugsController(IBugService bugs, UserManager<AppUser> userManager)
+    private readonly AppDbContext _db;
+    private readonly IWebHostEnvironment _env;
+    public BugsController(IBugService bugs, UserManager<AppUser> userManager, AppDbContext db, IWebHostEnvironment env)
     {
         _bugs = bugs;
         _userManager = userManager;
+        _db = db;
+        _env = env;
     }
 
     private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -106,5 +111,21 @@ public class BugsController : ControllerBase
         var developers = await _userManager.GetUsersInRoleAsync("Developer");
         var result = developers.Select(d => new { d.Id, d.FullName, d.Email });
         return Ok(new ApiResponse<object>(true, "Success", result));
+    }
+
+    // GET api/bugs/attachments/download/{attachmentId}
+    [HttpGet("attachments/download/{attachmentId}")]
+    public async Task<IActionResult> DownloadAttachment(int attachmentId)
+    {
+        var attachment = await _db.BugAttachments.FindAsync(attachmentId);
+        if (attachment == null) return NotFound();
+
+        var filePath = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads", Path.GetFileName(attachment.FilePath));
+
+        if (!System.IO.File.Exists(filePath))
+            return NotFound(new ApiResponse<string>(false, "File not found on server.", null));
+
+        var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+        return File(fileBytes, attachment.ContentType, attachment.FileName);
     }
 }
