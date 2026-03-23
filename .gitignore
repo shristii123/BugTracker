@@ -21,6 +21,8 @@ yarn-error.log*
 # .NET / C# backend
 # =======================
 
+BugTracker.API/wwwroot/uploads/
+
 # Build outputs
 bin/
 obj/

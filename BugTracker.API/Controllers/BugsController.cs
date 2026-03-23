@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using BugTracker.API.DTOs;
+using BugTracker.API.Models;
 using BugTracker.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BugTracker.API.Controllers;
@@ -12,7 +14,12 @@ namespace BugTracker.API.Controllers;
 public class BugsController : ControllerBase
 {
     private readonly IBugService _bugs;
-    public BugsController(IBugService bugs) => _bugs = bugs;
+    private readonly UserManager<AppUser> _userManager;
+    public BugsController(IBugService bugs, UserManager<AppUser> userManager)
+    {
+        _bugs = bugs;
+        _userManager = userManager;
+    }
 
     private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
     private bool IsDeveloper => User.IsInRole("Developer");
@@ -90,5 +97,14 @@ public class BugsController : ControllerBase
         var bug = await _bugs.AddAttachmentAsync(id, file, UserId);
         if (bug == null) return NotFound(new ApiResponse<string>(false, "Bug not found.", null));
         return Ok(new ApiResponse<BugDto>(true, "Attachment added.", bug));
+    }
+
+    // GET api/bugs/developers
+    [HttpGet("developers")]
+    public async Task<IActionResult> GetDevelopers()
+    {
+        var developers = await _userManager.GetUsersInRoleAsync("Developer");
+        var result = developers.Select(d => new { d.Id, d.FullName, d.Email });
+        return Ok(new ApiResponse<object>(true, "Success", result));
     }
 }

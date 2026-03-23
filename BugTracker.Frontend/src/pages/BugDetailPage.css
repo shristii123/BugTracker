@@ -1,0 +1,182 @@
+.bug-detail-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Back Button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #888;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  margin-bottom: 24px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.back-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+/* Header */
+.bug-header {
+  margin-bottom: 32px;
+}
+
+.bug-number {
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.bug-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Badges */
+.bug-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.badge-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Meta row */
+.bug-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: #888;
+  padding: 16px 0;
+  border-bottom: 1px solid #2a2a3a;
+  margin-top: 16px;
+}
+
+.bug-meta-item span {
+  color: #555;
+}
+
+.bug-meta-item strong {
+  color: #ccc;
+  margin-left: 6px;
+}
+
+/* Cards */
+.detail-card {
+  background: #17171f;
+  border: 1px solid #1e1e2e !important;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.detail-card .card-body {
+  padding: 28px;
+}
+
+.detail-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.detail-card-content {
+  color: #ccc;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+/* Attachments */
+.attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #1a1a24;
+  border: 1px solid #2a2a3a;
+  margin-bottom: 10px;
+}
+
+.attachment-name {
+  color: #6366f1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.attachment-size {
+  color: #555;
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
+.attachment-download {
+  padding: 5px 14px;
+  border-radius: 6px;
+  border: 1px solid #6366f1;
+  background: transparent;
+  color: #6366f1;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.attachment-download:hover {
+  background: #6366f1;
+  color: #fff;
+}
+
+/* Status update buttons */
+.status-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #666;
+  transition: all 0.15s;
+}
+
+.status-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.status-btn.active {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #fff;
+}

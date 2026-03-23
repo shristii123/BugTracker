@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { fetchBugs, updateStatus } from '../store/bugsSlice';
-import Badge from '../components/Badge';
-import './BugsPage.css';
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { fetchBugs, updateStatus } from "../store/bugsSlice";
+import Badge from "../components/Badge";
+import { Link } from "react-router-dom";
+import "./BugsPage.css";
 
 const BugsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { list, loading } = useAppSelector((s) => s.bugs);
   const user = useAppSelector((s) => s.auth.user);
-  const isDeveloper = user?.role === 'Developer';
-  const [search, setSearch] = useState('');
+  const isDeveloper = user?.role === "Developer";
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const t = setTimeout(() => dispatch(fetchBugs(search || undefined)), 300);
     return () => clearTimeout(t);
   }, [search, dispatch]);
 
-  const statuses = ['Open', 'InProgress', 'Resolved', 'Closed'];
+  const statuses = ["Open", "InProgress", "Resolved", "Closed"];
 
   return (
     <div className="bugs-page">
@@ -30,7 +31,11 @@ const BugsPage: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {search && <button className="s-clear" onClick={() => setSearch('')}>✕</button>}
+          {search && (
+            <button className="s-clear" onClick={() => setSearch("")}>
+              ✕
+            </button>
+          )}
         </div>
       </div>
 
@@ -43,8 +48,13 @@ const BugsPage: React.FC = () => {
           <table className="bugs-table">
             <thead>
               <tr>
-                <th>#</th><th>Title</th><th>Severity</th><th>Status</th>
-                <th>Reporter</th><th>Assignee</th><th>Created</th>
+                <th>#</th>
+                <th>Title</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Reporter</th>
+                <th>Assignee</th>
+                <th>Created</th>
                 {isDeveloper && <th>Action</th>}
               </tr>
             </thead>
@@ -52,11 +62,26 @@ const BugsPage: React.FC = () => {
               {list.map((bug) => (
                 <tr key={bug.id}>
                   <td className="id-cell">{bug.id}</td>
-                  <td className="title-cell">{bug.title}</td>
-                  <td><Badge label={bug.severity} /></td>
-                  <td><Badge label={bug.status} /></td>
+                  <td className="title-cell">
+                    <Link
+                      to={`/bugs/${bug.id}`}
+                      style={{ color: "#6366f1", textDecoration: "none" }}
+                    >
+                      {bug.title}
+                    </Link>
+                  </td>
+                  <td>
+                    <Badge label={bug.severity} />
+                  </td>
+                  <td>
+                    <Badge label={bug.status} />
+                  </td>
                   <td>{bug.reporterName}</td>
-                  <td>{bug.assigneeName ?? <span className="unassigned">Unassigned</span>}</td>
+                  <td>
+                    {bug.assigneeName ?? (
+                      <span className="unassigned">Unassigned</span>
+                    )}
+                  </td>
                   <td>{new Date(bug.createdAt).toLocaleDateString()}</td>
                   {isDeveloper && (
                     <td>
@@ -64,9 +89,20 @@ const BugsPage: React.FC = () => {
                         <select
                           className="status-select"
                           value={bug.status}
-                          onChange={(e) => dispatch(updateStatus({ id: bug.id, status: e.target.value }))}
+                          onChange={(e) =>
+                            dispatch(
+                              updateStatus({
+                                id: bug.id,
+                                status: e.target.value,
+                              }),
+                            )
+                          }
                         >
-                          {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+                          {statuses.map((s) => (
+                            <option key={s} value={s}>
+                              {s}
+                            </option>
+                          ))}
                         </select>
                       ) : (
                         <span className="na-text">—</span>
