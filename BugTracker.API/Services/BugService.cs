@@ -128,6 +128,11 @@ public class BugService : IBugService
 
     public async Task<BugDto?> AddAttachmentAsync(int bugId, IFormFile file, string userId)
     {
+        // File size limit — 5MB
+        const long maxSize = 5 * 1024 * 1024;
+        if (file.Length > maxSize)
+            throw new InvalidOperationException("File size exceeds the 5MB limit.");
+
         var bug = await _db.Bugs.FindAsync(bugId);
         if (bug == null) return null;
 
