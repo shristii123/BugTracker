@@ -1,0 +1,102 @@
+.dashboard { display: flex; flex-direction: column; gap: 32px; }
+
+.dash-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.dash-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px;
+}
+
+.dash-sub { color: #555; font-size: 0.9rem; margin: 0; }
+
+.dash-btn {
+  padding: 10px 20px;
+  background: #6366f1;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.dash-btn:hover { background: #4f46e5; }
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.stat-box {
+  background: #17171f;
+  border: 1px solid #1e1e2e;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.stat-lbl { color: #555; font-size: 0.8rem; margin: 0; }
+
+.recent-section {
+  background: #17171f;
+  border: 1px solid #1e1e2e;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.section-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.see-all { color: #6366f1; font-size: 0.85rem; text-decoration: none; }
+
+.muted { color: #444; padding: 24px; font-size: 0.875rem; }
+.muted a { color: #6366f1; }
+
+.recent-list { display: flex; flex-direction: column; }
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-top: 1px solid #1e1e2e;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: background 0.15s;
+}
+.recent-item:hover { background: #1e1e2e; }
+
+.recent-title { margin: 0 0 4px; font-size: 0.875rem; font-weight: 600; color: #ddd; }
+.recent-meta { margin: 0; font-size: 0.75rem; color: #555; }
+.recent-badges { display: flex; gap: 8px; flex-shrink: 0; }

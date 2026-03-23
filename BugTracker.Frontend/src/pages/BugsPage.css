@@ -1,0 +1,105 @@
+.bugs-page { display: flex; flex-direction: column; gap: 24px; }
+
+.bugs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.bugs-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.s-icon {
+  position: absolute;
+  left: 10px;
+  color: #444;
+  font-size: 1rem;
+}
+
+.search-inp {
+  padding: 9px 36px;
+  background: #17171f;
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  width: 280px;
+  transition: border 0.2s;
+}
+.search-inp:focus { border-color: #6366f1; }
+
+.s-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #444;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.center-msg { color: #444; text-align: center; padding: 60px 0; font-size: 0.9rem; }
+
+.table-wrap {
+  background: #17171f;
+  border: 1px solid #1e1e2e;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.bugs-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+
+.bugs-table thead tr { background: #0d0d14; }
+
+.bugs-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #444;
+  white-space: nowrap;
+}
+
+.bugs-table td {
+  padding: 12px 16px;
+  color: #aaa;
+  border-top: 1px solid #1e1e2e;
+  white-space: nowrap;
+}
+
+.bugs-table tbody tr:hover { background: #1e1e2e; }
+
+.id-cell { color: #555; font-size: 0.8rem; }
+.title-cell { color: #ddd; font-weight: 500; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.unassigned { color: #333; font-style: italic; font-size: 0.8rem; }
+.na-text { color: #333; }
+
+.status-select {
+  padding: 5px 8px;
+  background: #0d0d14;
+  border: 1px solid #2a2a3a;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  outline: none;
+}
