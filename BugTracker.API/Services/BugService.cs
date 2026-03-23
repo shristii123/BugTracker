@@ -28,10 +28,12 @@ public class BugService : IBugService
             ReproductionSteps = dto.ReproductionSteps,
             Severity = severity,
             ReporterId = reporterId,
+            AssigneeId = dto.AssigneeId,  
+            Status = dto.AssigneeId != null ? BugStatus.InProgress : BugStatus.Open,
         };
 
         _db.Bugs.Add(bug);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync();   
         return await GetByIdAsync(bug.Id) ?? throw new Exception("Bug not found after creation");
     }
 

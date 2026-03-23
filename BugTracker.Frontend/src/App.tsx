@@ -11,6 +11,7 @@ import BugsPage from './pages/BugsPage';
 import ReportBugPage from './pages/ReportBugPage';
 import MyBugsPage from './pages/MyBugsPage';
 import UnassignedPage from './pages/UnassignedPage';
+import BugDetailPage from './pages/BugDetailPage';
 import './App.css';
 
 const ProtectedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -44,6 +45,7 @@ const AppRoutes: React.FC = () => (
       <Route path="/unassigned" element={
         <ProtectedLayout><DeveloperOnly><UnassignedPage /></DeveloperOnly></ProtectedLayout>
       } />
+      <Route path="/bugs/:id" element={<ProtectedLayout><BugDetailPage /></ProtectedLayout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </BrowserRouter>

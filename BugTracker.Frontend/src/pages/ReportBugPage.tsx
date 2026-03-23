@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { createBug } from '../store/bugsSlice';
@@ -9,9 +9,14 @@ const ReportBugPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { loading, error } = useAppSelector((s) => s.bugs);
-  const [form, setForm] = useState({ title: '', description: '', reproductionSteps: '', severity: 'Low' });
+  const [form, setForm] = useState({ title: '', description: '', reproductionSteps: '', severity: 'Low',assigneeId: '' });
   const [file, setFile] = useState<File | null>(null);
   const [success, setSuccess] = useState('');
+  const [developers, setDevelopers] = useState<{ id: string; fullName: string }[]>([]);
+
+  useEffect(() => {
+  api.get('/bugs/developers').then(({ data }) => setDevelopers(data.data));
+}, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +80,20 @@ const ReportBugPage: React.FC = () => {
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Assign To (optional)</label>
+            <select
+              className="form-select"
+              value={form.assigneeId}
+              onChange={(e) => setForm({ ...form, assigneeId: e.target.value })}
+            >
+              <option value="">-- Select a Developer --</option>
+              {developers.map((dev) => (
+                <option key={dev.id} value={dev.id}>{dev.fullName}</option>
+              ))}
             </select>
           </div>
 

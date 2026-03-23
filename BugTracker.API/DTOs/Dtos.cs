@@ -10,7 +10,8 @@ public record CreateBugDto(
     string Title,
     string Description,
     string ReproductionSteps,
-    string Severity   // "Low" | "Medium" | "High"
+    string Severity,  // "Low" | "Medium" | "High"
+    string? AssigneeId
 );
 
 public record UpdateBugStatusDto(string Status); // "Open"|"InProgress"|"Resolved"|"Closed"
