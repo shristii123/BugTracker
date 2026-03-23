@@ -1,17 +1,50 @@
-# Node
-node_modules/
-build/
+# =======================
+# Node / React frontend
+# =======================
 
-# .NET
+# Node modules
+node_modules/
+
+# Build outputs
+build/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env files (API keys, secrets)
+.env
+
+# =======================
+# .NET / C# backend
+# =======================
+
+# Build outputs
 bin/
 obj/
 
-# Logs
-*.log
-
-# Env
-.env
-
-# Visual Studio
+# User files / VS
 .vs/
 *.user
+*.suo
+
+# Launch settings (local dev only)
+BugTracker.API/Properties/launchSettings.json
+
+# Secrets / sensitive data
+BugTracker.API/appsettings.json
+
+# =======================
+# Misc
+# =======================
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: coverage / test results
+coverage/
+*.coverage
+*.testresults
