@@ -1,45 +1,58 @@
-# Bug Tracking System — Claros Analytics
+# Bug Tracking System
 
-A full-stack Bug Tracking System built with **React + TypeScript** (frontend) and **.NET 9 Web API** (backend), using **SQL Server**, **Entity Framework Core (Code-First)**, **ASP.NET Core Identity**, and **JWT Authentication**.
+A full-stack bug tracking web application built with **React + TypeScript** on the frontend and **.NET 9 Web API** on the backend. Supports role-based workflows for users reporting bugs and developers triaging and resolving them.
 
 ---
 
 ## Features
 
-### User Management
-- Register as **User** or **Developer**
-- JWT-based login/authentication
-- Role-based access control (User vs Developer)
+### For Users
+- Register and log in with JWT-based authentication
+- Report bugs with title, description, severity level, and reproduction steps
+- Attach files (screenshots, logs) to bug reports
+- View and track your own submitted bugs
 
-### Bug Reporting (User & Developer)
-- Report bugs with title, description, severity, and reproduction steps
-- Attach files (screenshots, logs) to bugs
-- View your own reported bugs
+### For Developers
+- Browse all unassigned bugs with search/filter
+- Self-assign bugs from the unassigned queue
+- Progress bugs through a status workflow: `Open → In Progress → Resolved → Closed`
 
-### Bug Assignment (Developer only)
-- Browse unassigned bugs with search
-- Assign bugs to yourself from the unassigned list
-- Update status of assigned bugs (Open → In Progress → Resolved → Closed)
-
-### Architecture
-- Clean separation of concerns: Controllers → Services → Repositories (via EF Core)
-- Dependency Injection throughout
-- Global exception handling middleware
-- Code-First EF Core with migrations
-- Swagger UI for API testing
+### System
+- Role-based access control (User vs Developer) enforced on both frontend and API
+- Protected routes on the frontend; role-checked endpoints on the backend
+- Global exception handling middleware with consistent error responses
+- Swagger / OpenAPI documentation for all endpoints
 
 ---
 
 ## Tech Stack
 
-| Layer | Tech |
-|---|---|
-| Frontend | React 18, TypeScript, Redux Toolkit |
-| Backend | .NET 9, ASP.NET Core Web API |
-| Auth | ASP.NET Core Identity + JWT Bearer |
-| ORM | Entity Framework Core 9 (Code-First) |
-| Database | SQL Server |
-| Docs | Swagger / OpenAPI |
+| Layer    | Technology                                      |
+| -------- | ----------------------------------------------- |
+| Frontend | React 18, TypeScript, Redux Toolkit, Axios       |
+| Backend  | .NET 9, ASP.NET Core Web API                    |
+| Auth     | ASP.NET Core Identity + JWT Bearer              |
+| ORM      | Entity Framework Core 9 (Code-First Migrations) |
+| Database | SQL Server                                      |
+| Docs     | Swagger / OpenAPI                               |
+
+---
+
+## Architecture
+
+The backend follows a layered architecture with clean separation of concerns:
+
+```
+Controllers  →  Services (business logic)  →  Repositories (EF Core)
+```
+
+- **Controllers** handle HTTP routing and input validation
+- **Services** contain all business logic and are injected via interfaces
+- **EF Core** handles database access with Code-First migrations
+- **ASP.NET Core Identity** manages users and roles
+- **JWT middleware** protects endpoints and carries role claims
+
+The frontend uses Redux Toolkit for state management with an Axios interceptor that automatically attaches JWT tokens to every request.
 
 ---
 
@@ -47,14 +60,14 @@ A full-stack Bug Tracking System built with **React + TypeScript** (frontend) an
 
 ```
 BugTracker/
-├── BugTracker.API/              ← .NET 9 Backend
+├── BugTracker.API/
 │   ├── Controllers/
-│   │   ├── AuthController.cs    ← Register, Login
-│   │   └── BugsController.cs    ← CRUD, Assign, Status, Attachments
+│   │   ├── AuthController.cs        ← Register, Login
+│   │   └── BugsController.cs        ← CRUD, assign, status, attachments
 │   ├── Data/
-│   │   └── AppDbContext.cs      ← EF Core DbContext
+│   │   └── AppDbContext.cs
 │   ├── DTOs/
-│   │   └── Dtos.cs              ← All request/response records
+│   │   └── Dtos.cs
 │   ├── Middleware/
 │   │   └── ExceptionMiddleware.cs
 │   ├── Models/
@@ -62,19 +75,15 @@ BugTracker/
 │   │   ├── Bug.cs
 │   │   └── BugAttachment.cs
 │   ├── Services/
-│   │   ├── IServices.cs         ← Interfaces
-│   │   ├── AuthService.cs       ← JWT generation, Identity
-│   │   └── BugService.cs        ← Bug business logic
-│   ├── appsettings.json
-│   └── Program.cs               ← DI, JWT, Identity, Swagger, CORS
+│   │   ├── IServices.cs
+│   │   ├── AuthService.cs
+│   │   └── BugService.cs
+│   └── Program.cs
 │
-└── BugTracker.Frontend/         ← React Frontend
+└── BugTracker.Frontend/
     └── src/
         ├── components/
-        │   ├── Navbar.tsx
-        │   └── Badge.tsx
         ├── hooks/
-        │   └── redux.ts
         ├── pages/
         │   ├── LoginPage.tsx
         │   ├── RegisterPage.tsx
@@ -84,13 +93,37 @@ BugTracker/
         │   ├── MyBugsPage.tsx
         │   └── UnassignedPage.tsx
         ├── services/
-        │   └── api.ts           ← Axios + JWT interceptor
+        │   └── api.ts               ← Axios instance + JWT interceptor
         ├── store/
-        │   ├── index.ts
         │   ├── authSlice.ts
         │   └── bugsSlice.ts
-        └── App.tsx              ← Routes + Protected layout
+        └── App.tsx                  ← Routes + protected layout
 ```
+
+---
+
+## API Endpoints
+
+### Auth
+
+| Method | Endpoint             | Auth | Description       |
+| ------ | -------------------- | ---- | ----------------- |
+| POST   | `/api/auth/register` | ❌   | Register new user |
+| POST   | `/api/auth/login`    | ❌   | Login, get JWT    |
+
+### Bugs
+
+| Method | Endpoint                     | Auth | Role      | Description                             |
+| ------ | ---------------------------- | ---- | --------- | --------------------------------------- |
+| GET    | `/api/bugs`                  | ✅   | Any       | Get all bugs (supports `?search=`)      |
+| GET    | `/api/bugs/{id}`             | ✅   | Any       | Get bug by ID                           |
+| GET    | `/api/bugs/my`               | ✅   | Any       | Get my reported bugs                    |
+| GET    | `/api/bugs/unassigned`       | ✅   | Developer | Get unassigned bugs                     |
+| GET    | `/api/bugs/developers`       | ✅   | Developer | List all developers                     |
+| POST   | `/api/bugs`                  | ✅   | Any       | Report a new bug                        |
+| PUT    | `/api/bugs/{id}/assign`      | ✅   | Developer | Assign bug to self                      |
+| PUT    | `/api/bugs/{id}/status`      | ✅   | Developer | Update bug status                       |
+| POST   | `/api/bugs/{id}/attachments` | ✅   | Any       | Upload file attachment                  |
 
 ---
 
@@ -100,90 +133,47 @@ BugTracker/
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
 - [Node.js >= 16](https://nodejs.org/)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server) (local or Express)
-- [EF Core CLI tools](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
-
----
+- [SQL Server](https://www.microsoft.com/en-us/sql-server) (local or Express edition)
 
 ### Backend Setup
 
 ```bash
-# 1. Navigate to API project
 cd BugTracker.API
 
-# 2. Install EF Core CLI (if not already installed)
+# Install EF Core CLI (if not already installed)
 dotnet tool install --global dotnet-ef
 
-# 3. Restore packages
+# Restore packages
 dotnet restore
 
-# 4. Update the connection string in appsettings.json
-#    Default: Server=localhost;Database=BugTrackerDb;Trusted_Connection=True;TrustServerCertificate=True;
+# Update connection string in appsettings.json (see Configuration below)
 
-# 5. Run database migrations (creates DB + tables automatically)
-dotnet ef migrations add InitialCreate
+# Run migrations
 dotnet ef database update
 
-# 6. Run the API
+# Start the API
 dotnet run
 ```
 
-API will be available at: **http://localhost:55578**
-Swagger UI at: **http://localhost:55578/swagger**
-
----
+API runs at `http://localhost:55578`  
+Swagger UI at `http://localhost:55578/swagger`
 
 ### Frontend Setup
 
 ```bash
-# 1. Navigate to frontend project
 cd BugTracker.Frontend
 
-# 2. Install dependencies
 npm install
-
-# 3. Start the development server
 npm start
 ```
 
-Frontend will be available at: **http://localhost:3000**
-
----
-
-## API Endpoints
-
-### Auth
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/api/auth/register` | ❌ | Register new user |
-| POST | `/api/auth/login` | ❌ | Login and get JWT |
-
-### Bugs
-| Method | Endpoint | Auth | Role | Description |
-|---|---|---|---|---|
-| GET | `/api/bugs` | ✅ | Any | Get all bugs (with optional `?search=`) |
-| GET | `/api/bugs/{id}` | ✅ | Any | Get bug by ID |
-| GET | `/api/bugs/my` | ✅ | Any | Get my reported bugs |
-| GET | `/api/bugs/unassigned` | ✅ | Developer | Get unassigned bugs |
-| GET | `/api/bugs/developers` | ✅ | Developer | Get list of all developers (for assignment) |
-| POST | `/api/bugs` | ✅ | Any | Report a new bug |
-| PUT | `/api/bugs/{id}/assign` | ✅ | Developer | Assign bug to self |
-| PUT | `/api/bugs/{id}/status` | ✅ | Developer | Update bug status |
-| POST | `/api/bugs/{id}/attachments` | ✅ | Any | Upload file attachment |
-
----
-
-## Default Roles
-
-When you register, choose:
-- **User** — Can report bugs and view their own reports
-- **Developer** — Can view unassigned bugs, assign them to self, and update status
+Frontend runs at `http://localhost:3000`
 
 ---
 
 ## Configuration
 
-Edit `BugTracker.API/appsettings.json`:
+Create or update `BugTracker.API/appsettings.Development.json`:
 
 ```json
 {
@@ -191,29 +181,25 @@ Edit `BugTracker.API/appsettings.json`:
     "Default": "Server=localhost;Database=BugTrackerDb;Trusted_Connection=True;TrustServerCertificate=True;"
   },
   "Jwt": {
-    "Key": "BugTrackerSuperSecretKey2026!!ClarosAnalytics",
+    "Key": "your-secret-key-here",
     "Issuer": "BugTrackerAPI",
     "Audience": "BugTrackerClient"
   }
 }
 ```
 
+> **Note:** Never commit real secrets to source control. Use environment variables or user secrets in production.
+
 ---
 
-## Git Workflow
+## Screenshots
 
-```
-main
-└── feature/auth-identity
-└── feature/bug-reporting
-└── feature/bug-assignment
-└── feature/file-attachments
-└── feature/frontend-ui
-```
+![Dashboard](screenshots/Dashboard.png)
+![ReportBug](screenshots/ReportBug.png)
+![AllBugs](screenshots/AllBugs.png)
 
 ---
 
 ## Author
 
-**Shristi** — Full-Stack Developer Assignment
-Submitted to: Claros Analytics
+[Shristi](https://github.com/shristii123)
